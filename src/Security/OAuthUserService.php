@@ -41,7 +41,7 @@ class OAuthUserService implements OAuthAwareUserProviderInterface
 
             $user->setFullName($fullName);
             $user->setUsername($username);
-            $user->setRoles(['ROLE_ADMIN']);
+            $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
 
             // ✅ Mot de passe factice requis par la BDD
             $fakePassword = bin2hex(random_bytes(10));
