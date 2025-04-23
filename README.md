@@ -1,88 +1,63 @@
-Symfony Demo Application
-========================
+# 🔐 Projet Final — Méthodes d’Authentification 1 (IC3 S2) — Efrei 2024/2025
 
-The "Symfony Demo Application" is a reference application created to show how
-to develop applications following the [Symfony Best Practices][1].
+## 🏫 Informations générales
 
-You can also learn about these practices in [the official Symfony Book][5].
+- **École :** Efrei Paris  
+- **Intervenant :** Mr. Raouf Amdouni  
+- **Promotion :** L3 Cyber & IA - X-BAC-ICS-3 - XICS601 - Groupe PAR01 – 2425P
+- **Groupe :** Chaymaa, Nourhan, Abdelhak, Thibault, Abdelhadi
 
-Requirements
-------------
+---
 
-  * PHP 8.2.0 or higher;
-  * PDO-SQLite PHP extension enabled;
-  * and the [usual Symfony application requirements][2].
+## 🎯 Objectif du projet
 
-Installation
-------------
+Améliorer la sécurité d’un blog Symfony existant en intégrant un système d’authentification avancé **et** une **API externe météo**. Le but est de sécuriser les routes sensibles et d’enrichir l’expérience utilisateur via des services modernes.
 
-There are 3 different ways of installing this project depending on your needs:
+---
 
-**Option 1.** [Download Symfony CLI][4] and use the `symfony` binary installed
-on your computer to run this command:
+## 1. 🔐 Connexion sécurisée à GitHub depuis Codespaces
 
-```bash
-symfony new --demo my_project
-```
+- Création et ajout d’une clé SSH dans GitHub
+- Test de fonctionnement via un commit + push
+---
 
-**Option 2.** [Download Composer][6] and use the `composer` binary installed
-on your computer to run these commands:
+## 2. 🧩 Authentification sécurisée via GitHub (OAuth2) 
 
-```bash
-# you can create a new project based on the Symfony Demo project...
-composer create-project symfony/symfony-demo my_project
+- Remplacement complet du login formulaire par un système OAuth2 via **GitHub**
+- Intégration de `HWIOAuthBundle`
+- Création automatique de l’utilisateur s’il n’existe pas
+- Attribution du rôle `ROLE_USER` par défaut, possibilité de promotion `ROLE_ADMIN`
+- Système de **Rate Limiting** (`login_throttling`)
+- Sécurité des credentials via le fichier `.env.local`
 
-# ...or you can clone the code repository and install its dependencies
-git clone https://github.com/symfony/demo.git my_project
-cd my_project/
-composer install
-```
+### ✅ Résultat :
+- Les routes `/admin` sont maintenant protégées par `#[IsGranted('ROLE_ADMIN')]`
+- Gestion des erreurs d’authentification incluse
 
-**Option 3.** Click the following button to deploy this project on Platform.sh,
-the official Symfony PaaS, so you can try it without installing anything locally:
+### 📦 Technologies :
+- Symfony 7
+- HWIOAuthBundle
+- Doctrine
+- CSRF + RateLimiter
 
-<p align="center">
-<a href="https://console.platform.sh/projects/create-project?template=https://raw.githubusercontent.com/symfonycorp/platformsh-symfony-template-metadata/main/symfony-demo.template.yaml&utm_content=symfonycorp&utm_source=github&utm_medium=button&utm_campaign=deploy_on_platform"><img src="https://platform.sh/images/deploy/lg-blue.svg" alt="Deploy on Platform.sh" width="180px" /></a>
-</p>
+---
 
-Usage
------
+## 3. ☀️ Intégration de l’API OpenWeatherMap 
 
-There's no need to configure anything before running the application. There are
-2 different ways of running this application depending on your needs:
+- Création d’un service `WeatherService` en Symfony
+- Appel API sécurisé avec une clé stockée dans `.env.local`
+- Ajout d’un formulaire pour que l’utilisateur choisisse une **ville dynamique**
+- Affichage en temps réel de :
+  - La température actuelle
+  - La condition météo (ex : pluie, ciel dégagé...)
 
-**Option 1.** [Download Symfony CLI][4] and run this command:
+### ✅ Résultat :
+- Affichage météo visible sur la page d’accueil `/blog`
+- Exemple de réponse affichée :  
+  > Météo à Paris — Température : 18°C — Conditions : ciel dégagé
 
-```bash
-cd my_project/
-symfony serve
-```
-
-Then access the application in your browser at the given URL (<https://localhost:8000> by default).
-
-**Option 2.** Use a web server like Nginx or Apache to run the application
-(read the documentation about [configuring a web server for Symfony][3]).
-
-On your local machine, you can run this command to use the built-in PHP web server:
-
-```bash
-cd my_project/
-php -S localhost:8000 -t public/
-```
-
-Tests
------
-
-Execute this command to run tests:
-
-```bash
-cd my_project/
-./bin/phpunit
-```
-
-[1]: https://symfony.com/doc/current/best_practices.html
-[2]: https://symfony.com/doc/current/setup.html#technical-requirements
-[3]: https://symfony.com/doc/current/setup/web_server_configuration.html
-[4]: https://symfony.com/download
-[5]: https://symfony.com/book
-[6]: https://getcomposer.org/
+### 🔐 Variables d’environnement :
+```dotenv
+GITHUB_CLIENT_ID=xxx
+GITHUB_CLIENT_SECRET=xxx
+OPENWEATHER_API_KEY=xxx
