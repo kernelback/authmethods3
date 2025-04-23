@@ -3,6 +3,24 @@
 {% block body_id 'blog_index' %}
 
 {% block main %}
+    {# Affichage météo si disponible #}
+<form method="get" action="{{ path('blog_index') }}" class="mb-4">
+    <div class="form-group">
+        <label for="city">Choisir une ville :</label>
+        <input type="text" id="city" name="city" value="{{ selectedCity|default('Paris') }}" class="form-control" placeholder="Ex: Paris, Marseille, Londres..." />
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Afficher la météo</button>
+</form>
+
+
+    {% if weather %}
+    <div class="alert alert-info mb-4">
+        <strong>Météo à {{ weather.name }}</strong><br>
+        Température : {{ weather.main.temp }}°C<br>
+        Conditions : {{ weather.weather[0].description }}
+    </div>
+{% endif %}
+
     {% for post in paginator.results %}
         {{ include('blog/_post.html.twig') }}
     {% else %}
@@ -10,7 +28,6 @@
     {% endfor %}
 
     {% if paginator.hasToPaginate %}
-
         <div class="navigation text-center">
             <ul class="pagination pagination-lg">
                 {% if paginator.hasPreviousPage %}

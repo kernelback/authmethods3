@@ -6,6 +6,7 @@
 parameters:
     app.locale: 'en'
     app.notifications.email_sender: anonymous@example.com
+    openweather.api_key: '%env(OPENWEATHER_API_KEY)%' # ✅ Clé API météo
 
 services:
     # default configuration for services in *this* file
@@ -27,6 +28,11 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    # ✅ Enregistrement explicite du WeatherService avec l'argument API key
+    App\Service\WeatherService:
+        arguments:
+            $openWeatherApiKey: '%openweather.api_key%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
